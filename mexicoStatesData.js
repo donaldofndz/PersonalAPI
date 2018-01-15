@@ -1,0 +1,3 @@
+var estadosGeo = [
+{Nombre: Aguascalientes }
+]
