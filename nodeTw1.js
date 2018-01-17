@@ -1,12 +1,34 @@
+	//Se requiere para la utilizacion de twitter	
+	var Twitter = require('twitter-node-client').Twitter;
+
 	//Callback functions
 	var error = function (err, response, body) {
-    	console.log('ERROR [%s]', err);
+    	console.log(err);
 	};
 	var success = function (data) {
 		console.log(JSON.parse(data))
 		console.log(typeof data)
 
 	};
+
+	//Get this data from your twitter apps dashboard
+	var config = {
+    	"consumerKey": "tnbObJbBa8X7HQIidgFhhJDvg",
+    	"consumerSecret": "OyspGkV8C1zG3q4bMlPjh8Z1fn8xfJyyFDSIp65mYD7tmvgeCW",
+    	"accessToken": "236623065-TPjp9tNhDQKLgqOBCkvwBW5qGV5LZ2GwaM8CrzEI",
+    	"accessTokenSecret": "C957fqMuMhvhTdwYeWKxjwxfGjhd4vhKJeh627csVPhyA",
+    	"callBackUrl": ""
+	}
+
+	//Se inicializa variable de twitter 
+    var twitter = new Twitter(config);
+
+    var final = []
+
+    var city = "", country=""
+
+    /*-------------------*/
+
 
 	var filtroMexico = function(data){
 
@@ -22,62 +44,50 @@
 
 	}
 
-	function cincuntaTT(data){
-		data = JSON.parse(data)
-		console.log("El resultado es: ");
-		console.log(data[0])
-
-	}
-
 	function getTT(data){
-		// data.forEach(function(element){
-		// 	twitter.getCustomApiCall('/trends/place.json',{id:element.woeid}, error, cincuntaTT);
-		// })
-		// 
+		data.forEach(function(element){
+			city= element.name
+			country = element.country
+			twitter.getCustomApiCall('/trends/place.json',{id:element.woeid}, error, cincuntaTT);
+		})
 
-		twitter.getCustomApiCall('/trends/place.json',{id:data[0].woeid}, error, cincuntaTT);
-
-	}
-
-	var Twitter = require('twitter-node-client').Twitter;
-
-	//Get this data from your twitter apps dashboard
-	var config = {
+		// twitter.getCustomApiCall('/trends/place.json',{id:data[0].woeid}, error, cincuntaTT);
 
 	}
 
-    var twitter = new Twitter(config);
+	function cincuntaTT(data){
 
-    // My calls 
-    
-	// twitter.getCustomApiCall('/trends/closest.json',{ lat:'37.781157', long:'-122.400612831116'}, error, success);
+		data = JSON.parse(data)
+
+		for(let value of data){
+
+			var tendencias = value.trends
+
+			console.log(tendencias)
+
+			tendencias.forEach(function(element){
+
+				//falta poner el numero de vistas 
+
+				// var elemento = new Object();
+
+				// elemento.trends = element.name 
+				// elemento.country = country
+				// elemento.city = city
+
+				// console.log(element)
+
+				// final.push(elemento)
+			})
+		}
+
+
+		console.log(final)
+
+
+	}
+
+
 	
 	twitter.getCustomApiCall('/trends/available.json',{}, error, filtroMexico);
 	
-	//Example calls
-
-	// twitter.getUserTimeline({ screen_name: 'donaldofm', count: '1'}, error, success);
-	
-	// var mentions = twitter.getMentionsTimeline({ count: '1'}, error, success);
-	
-	// twitter.getHomeTimeline({ count: '10'}, error, success);
-	
-	// twitter.getReTweetsOfMe({ count: '10'}, error, success);
-	
-	// twitter.getTweet({ id: '1111111111'}, error, success);
-
-	//	116545
-
-
-	
-	//
-	// Get 10 tweets containing the hashtag haiku
-	//
-
-	// twitter.getSearch({'q':'#haiku','count': 10}, error, success);
-	
-	//
-	// Get 10 popular tweets with a positive attitude about a movie that is not scary 
-	//
-
-	// twitter.getSearch({'q':' movie -scary :) since:2013-12-27', 'count': 10, 'result\_type':'popular'}, error, success);
